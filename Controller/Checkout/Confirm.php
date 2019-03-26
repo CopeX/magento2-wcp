@@ -113,6 +113,23 @@ class Confirm extends \Magento\Framework\App\Action\Action implements CsrfAwareA
         return true;
     }
     
+    private function validateRequest(
+        HttpRequest $request,
+        ActionInterface $action
+    ): bool {
+        $valid = null;
+        if ($action instanceof CsrfAwareActionInterface) {
+            $valid = $action->validateForCsrf($request);
+        }
+        if ($valid === null) {
+            $valid = !$request->isPost()
+                || $request->isAjax()
+                || $this->formKeyValidator->validate($request);
+        }
+
+        return $valid;
+    }
+    
 
     public function execute()
     {
