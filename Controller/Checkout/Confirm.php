@@ -34,8 +34,11 @@ namespace Wirecard\CheckoutPage\Controller\Checkout;
 
 use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
 
-class Confirm extends \Magento\Framework\App\Action\Action
+class Confirm extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
 
     /**
@@ -98,6 +101,18 @@ class Confirm extends \Magento\Framework\App\Action\Action
         $this->_quoteManagement = $quoteManagement;
         $this->_orderManagement = $orderManagement;
     }
+    
+    
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+    
 
     public function execute()
     {
