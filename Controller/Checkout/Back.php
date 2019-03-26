@@ -34,8 +34,11 @@ namespace Wirecard\CheckoutPage\Controller\Checkout;
 
 use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
 
-class Back extends \Magento\Framework\App\Action\Action
+class Back extends \Magento\Framework\App\Action\Action  implements CsrfAwareActionInterface
 {
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Request
@@ -122,6 +125,16 @@ class Back extends \Magento\Framework\App\Action\Action
         $this->_orderManagement   = $orderManagement;
     }
 
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+    
     public function execute()
     {
         $redirectTo = 'checkout/cart';
