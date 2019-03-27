@@ -32,7 +32,11 @@
 
 namespace Wirecard\CheckoutPage\Controller\Checkout;
 
-class Failed extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+
+class Failed extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
     /**
      * @var \Magento\Framework\HTTP\PhpEnvironment\Request
@@ -59,6 +63,16 @@ class Failed extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
         $this->_resultPageFactory = $resultPageFactory;
         $this->_url               = $context->getUrl();
+    }
+    
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 
     public function execute()
